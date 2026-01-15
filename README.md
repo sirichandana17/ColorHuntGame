@@ -23,6 +23,7 @@ The player must **match the actual color of the displayed text**, not the color 
 Below is a screenshot of the game while running:
 ![Color Hunt Game Screenshot](screenshot-gamejava.jpg)
 
+
 ## 🛠 Technologies Used
 - Java
 - Swing
