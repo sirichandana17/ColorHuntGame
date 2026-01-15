@@ -15,8 +15,10 @@ class GamePanel extends JFrame {
     private JButton[] colorButtons;
     private int score = 0;
     private int timeRemaining = 60;
-    private String currentColorText;
     private Timer gameTimer;
+
+    // THIS stores the ACTUAL color to be matched
+    private Color currentDisplayColor;
 
     private final String[] colors = {
             "Red", "Green", "Blue", "Yellow", "Orange",
@@ -40,7 +42,8 @@ class GamePanel extends JFrame {
     private void showInstructions() {
         JOptionPane.showMessageDialog(
                 this,
-                "Match the TEXT, not the COLOR!\n\n" +
+                "MATCH THE COLOR, NOT THE WORD!\n\n" +
+                "✔ Click the button whose COLOR matches the text color\n" +
                 "+1 for correct\n-2 for wrong\n60 seconds",
                 "Instructions",
                 JOptionPane.INFORMATION_MESSAGE
@@ -49,7 +52,7 @@ class GamePanel extends JFrame {
 
     private void initializeUI() {
 
-        JLabel header = new JLabel("Color Hunt Game - Match the Color!", SwingConstants.CENTER);
+        JLabel header = new JLabel("Color Hunt Game - Match the COLOR!", SwingConstants.CENTER);
         header.setFont(new Font("Arial", Font.BOLD, 36));
         header.setOpaque(true);
         header.setBackground(new Color(60, 120, 200));
@@ -86,10 +89,12 @@ class GamePanel extends JFrame {
             btn.setBackground(getColorFromString(colors[i]));
             btn.setForeground(Color.WHITE);
             btn.setFocusPainted(false);
+
             btn.addActionListener(e -> {
                 animateButton(btn);
-                checkAnswer(btn.getText());
+                checkAnswer(btn.getBackground());
             });
+
             colorButtons[i] = btn;
             buttonPanel.add(btn);
         }
@@ -112,7 +117,7 @@ class GamePanel extends JFrame {
         updateColor();
     }
 
-    // ⭐ FIXED METHOD ⭐
+    // ⭐ CORE LOGIC: RANDOM WORD + RANDOM COLOR (MISMATCH)
     private void updateColor() {
         Random random = new Random();
 
@@ -121,15 +126,16 @@ class GamePanel extends JFrame {
 
         do {
             colorIndex = random.nextInt(colors.length);
-        } while (colorIndex == textIndex); // ENSURE mismatch
+        } while (colorIndex == textIndex);
 
-        currentColorText = colors[textIndex];
-        colorLabel.setText(currentColorText);
-        colorLabel.setForeground(getColorFromString(colors[colorIndex]));
+        colorLabel.setText(colors[textIndex]);
+        currentDisplayColor = getColorFromString(colors[colorIndex]);
+        colorLabel.setForeground(currentDisplayColor);
     }
 
-    private void checkAnswer(String chosenColor) {
-        if (chosenColor.equalsIgnoreCase(currentColorText)) {
+    // ⭐ MATCH ACTUAL COLOR
+    private void checkAnswer(Color chosenButtonColor) {
+        if (chosenButtonColor.equals(currentDisplayColor)) {
             score++;
         } else {
             score = Math.max(0, score - 2);
@@ -176,34 +182,21 @@ class GamePanel extends JFrame {
         }
     }
 
-   private Color getColorFromString(String name) {
-    switch (name.toLowerCase()) {
-        case "red":
-            return Color.RED;
-        case "green":
-            return Color.GREEN;
-        case "blue":
-            return Color.BLUE;
-        case "yellow":
-            return Color.YELLOW;
-        case "orange":
-            return Color.ORANGE;
-        case "purple":
-            return new Color(128, 0, 128);
-        case "cyan":
-            return Color.CYAN;
-        case "pink":
-            return Color.PINK;
-        case "brown":
-            return new Color(139, 69, 19);
-        case "gray":
-            return Color.GRAY;
-        case "teal":
-            return new Color(0, 128, 128);
-        case "magenta":
-            return Color.MAGENTA;
-        default:
-            return Color.BLACK;
-    }
+    private Color getColorFromString(String name) {
+        switch (name.toLowerCase()) {
+            case "red": return Color.RED;
+            case "green": return Color.GREEN;
+            case "blue": return Color.BLUE;
+            case "yellow": return Color.YELLOW;
+            case "orange": return Color.ORANGE;
+            case "purple": return new Color(128, 0, 128);
+            case "cyan": return Color.CYAN;
+            case "pink": return Color.PINK;
+            case "brown": return new Color(139, 69, 19);
+            case "gray": return Color.GRAY;
+            case "teal": return new Color(0, 128, 128);
+            case "magenta": return Color.MAGENTA;
+            default: return Color.BLACK;
+        }
     }
 }
