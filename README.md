@@ -21,7 +21,7 @@ The player must **match the actual color of the displayed text**, not the color 
 
 ## 📸 Screenshot
 Below is a screenshot of the game while running:
-![Color Hunt Game Screenshot](screenshot-gamejava.jpg)
+![Color Hunt Game Screenshot](screenshot-gamejava-v2.jpg)
 
 
 ## 🛠 Technologies Used
